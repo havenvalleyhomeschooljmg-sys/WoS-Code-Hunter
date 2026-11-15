@@ -1,5 +1,26 @@
 import fs from 'node:fs/promises';
+import { createClient } from '@supabase/supabase-js';
 
+try {
+  process.loadEnvFile('.env');
+} catch (error) {
+  if (error.code !== 'ENOENT') throw error;
+}
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SECRET_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('Missing Supabase credentials.');
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false
+  }
+});
 const sources = [
   'https://www.gamesradar.com/games/survival/whiteout-survival-codes-gift/'
 ];
@@ -103,6 +124,48 @@ for (const url of sources) {
 }
 
 const codes = [...records.values()];
+let inserted = 0;
+let alreadyListed = 0;
+
+for (const item of codes) {
+  const { data: existing, error: lookupError } = await supabase
+    .from('gift_codes')
+    .select('id')
+    .ilike('code', item.code)
+    .limit(1);
+
+  if (lookupError) throw lookupError;
+
+  if (existing && existing.length > 0) {
+    alreadyListed++;
+    continue;
+  }
+
+  const { error: insertError } = await supabase
+    .from('gift_codes')
+    .insert({
+      code: item.code,
+      source: item.source,
+      sources: item.sources,
+      community: false,
+      status: 'unverified'
+    });
+
+  if (insertError) {
+    if (insertError.code === '23505') {
+      alreadyListed++;
+      continue;
+    }
+    throw insertError;
+  }
+
+  inserted++;
+}
+
+console.log(
+  'Supabase: ' + inserted + ' new codes, ' +
+  alreadyListed + ' already listed'
+);
 
 await fs.mkdir(new URL('../data/', import.meta.url), {
   recursive: true
