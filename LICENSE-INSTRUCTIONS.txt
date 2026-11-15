@@ -1,0 +1,4 @@
+License chosen: GNU Affero General Public License version 3.0 (AGPL-3.0-only).
+Before publishing the source, download the COMPLETE official license text from:
+https://www.gnu.org/licenses/agpl-3.0.txt
+Save it as LICENSE in the repository root. This instructions file is NOT a substitute for the complete license text.

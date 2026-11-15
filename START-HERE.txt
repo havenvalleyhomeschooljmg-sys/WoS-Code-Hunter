@@ -1,0 +1,11 @@
+WoS CODE HUNTER - SIMPLE PHONE SETUP
+
+This ZIP is the complete website, not just instructions.
+
+STEP 1: Download this ZIP. In Samsung My Files > Downloads, tap the ZIP and choose Extract.
+STEP 2: Open github.com in Chrome, sign in, create a new PUBLIC repository named wos-code-hunter.
+STEP 3: In your repository, choose Add file > Upload files. Upload package.json, server.js, render.yaml, and the public folder's index.html (index.html must be inside a folder named public in GitHub). This folder requirement is tricky on a phone. A computer is easier. If you get stuck, send a screenshot.
+STEP 4: Open dashboard.render.com. Sign in with GitHub. New > Blueprint > connect the wos-code-hunter repository. Confirm the service plan says FREE before deploying.
+STEP 5: Render gives you a website URL. Open it, then share it with your alliance.
+
+IMPORTANT: The app is a trial. Free Render services sleep, temporary files reset on restarts, and automatic source scanning may find no codes. No passwords or player IDs should be submitted.
