@@ -1,0 +1,11 @@
+
+.env
+.env.*
+!.env.example
+
+server.backup.js
+test-supabase.cjs
+codes.backup.json
+
+node_modules/
+*.log

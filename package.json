@@ -1,1 +1,1 @@
-{"name":"wos-code-hunter","version":"1.0.0","private":true,"scripts":{"start":"node server.js"},"engines":{"node":">=20"}}
+{"name":"wos-code-hunter","version":"1.0.0","private":true,"scripts":{"start":"node server.js"},"engines":{"node":">=20"},"dependencies":{"@supabase/supabase-js":"^2.119.0"}}
