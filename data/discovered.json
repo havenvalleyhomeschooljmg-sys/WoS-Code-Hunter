@@ -1,5 +1,46 @@
 {
-  "codes": [],
-  "lastScan": null,
-  "scanNote": "Not scanned yet"
+  "codes": [
+    {
+      "code": "Diwali",
+      "source": "https://www.gamesradar.com/games/survival/whiteout-survival-codes-gift/",
+      "sources": [
+        "https://www.gamesradar.com/games/survival/whiteout-survival-codes-gift/"
+      ],
+      "added": "2026-11-15T18:48:36.422Z",
+      "lastSeen": "2026-11-15T18:48:36.422Z",
+      "yes": 0,
+      "no": 0,
+      "community": false,
+      "status": "unverified"
+    },
+    {
+      "code": "GuDokYTKOR",
+      "source": "https://www.gamesradar.com/games/survival/whiteout-survival-codes-gift/",
+      "sources": [
+        "https://www.gamesradar.com/games/survival/whiteout-survival-codes-gift/"
+      ],
+      "added": "2026-11-15T18:48:36.422Z",
+      "lastSeen": "2026-11-15T18:48:36.422Z",
+      "yes": 0,
+      "no": 0,
+      "community": false,
+      "status": "unverified"
+    },
+    {
+      "code": "gogoWOS",
+      "source": "https://www.gamesradar.com/games/survival/whiteout-survival-codes-gift/",
+      "sources": [
+        "https://www.gamesradar.com/games/survival/whiteout-survival-codes-gift/"
+      ],
+      "added": "2026-11-15T18:48:36.422Z",
+      "lastSeen": "2026-11-15T18:48:36.422Z",
+      "yes": 0,
+      "no": 0,
+      "community": false,
+      "status": "unverified"
+    }
+  ],
+  "lastScan": "2026-11-15T18:48:36.422Z",
+  "scanNote": "Source-reported candidates only; not game-verified.",
+  "failures": []
 }
