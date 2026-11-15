@@ -16,7 +16,7 @@ const sources=[
 ];
 let scanning=false;
 async function scan(){if(scanning)return;scanning=true;let added=0,checked=0;const errors=[];
- for(const url of sources){try{const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),9000);let response;try{response=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0 (compatible; WoSCodeHunter/1.0)'},signal:controller.signal})}finally{clearTimeout(timer)}if(!response.ok)throw Error('HTTP '+response.status);const html=(await response.text()).slice(0,700000);checked++;
+ for(const url of sources){try{const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),20000);let response;try{response=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0 (compatible; WoSCodeHunter/1.0)'},signal:controller.signal})}finally{clearTimeout(timer)}if(!response.ok)throw Error('HTTP '+response.status);const html=(await response.text()).slice(0,700000);checked++;
  // Extract only candidates explicitly appearing near code labels in public pages.
  const text=html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,' ').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/&(?:nbsp|amp|quot|#39);/g,' ');
  const re=/(?:gift\s*code|redeem\s*code|working\s*codes?)\s*[:\-–]?\s*([A-Za-z0-9_-]{5,24})/gi;let match,count=0;
@@ -36,4 +36,4 @@ http.createServer((req,res)=>{const u=new URL(req.url,'http://localhost');const 
  if(req.method==='POST'&&u.pathname==='/api/admin/scan'){if(!process.env.ADMIN_KEY||req.headers.authorization!=='Bearer '+process.env.ADMIN_KEY)return send(res,403,{error:'Forbidden'});scan();return send(res,202,{ok:true})}
  if(req.method!=='GET')return send(res,405,{error:'Method not allowed'});
  let p=path.join(__dirname,'public',u.pathname==='/'?'index.html':u.pathname);if(!p.startsWith(path.join(__dirname,'public')+path.sep))return send(res,404,{error:'Not found'});fs.readFile(p,(err,buf)=>{if(err){res.writeHead(404);return res.end('Not found')}res.writeHead(200,{'Content-Type':mime[path.extname(p)]||'application/octet-stream'});res.end(buf)})
-}).listen(PORT,()=>{console.log('WoS Code Hunter listening on '+PORT);scan();setInterval(scan,6*60*60*1000).unref()});
+}).listen(PORT,()=>{console.log('WoS Code Hunter listening on '+PORT);scan();setInterval(scan,15*60*60*1000).unref()});
