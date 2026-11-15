@@ -1,6 +1,7 @@
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const { createClient } = require('@supabase/supabase-js');
 
 const PORT = process.env.PORT || 3000;
@@ -11,7 +12,12 @@ if (fs.existsSync('.env') && fs.statSync('.env').isFile()) {
 
 const url = process.env.SUPABASE_URL;
 const key = process.env.SUPABASE_SECRET_KEY;
+const voteSecret = process.env.VOTE_HASH_SECRET;
 
+if (!voteSecret || voteSecret.length < 32) {
+  console.error('Missing or invalid VOTE_HASH_SECRET');
+  process.exit(1);
+}
 if (!url || !key) {
   console.error('Missing SUPABASE_URL or SUPABASE_SECRET_KEY');
   process.exit(1);
@@ -161,26 +167,37 @@ async function handleApi(req, res, pathname) {
           });
         }
 
-        const { error } = await supabase
-          .from('gift_codes')
-          .insert({
-            code,
-            source: 'Community submission',
-            sources: [],
-            community: true,
-            status: 'unverified'
-          });
+        const visitorId = req.socket.remoteAddress || 'unknown';
 
-        if (error) {
-          if (error.code === '23505') {
-            return send(res, 409, {
-              error: 'This code is already listed.'
-            });
-          }
-          throw error;
-        }
+const voterHash = crypto
+  .createHmac('sha256', voteSecret)
+  .update(visitorId)
+  .digest('hex');
 
-        return send(res, 200, { ok: true });
+const { data: result, error } = await supabase.rpc(
+  'record_unique_code_vote',
+  {
+    p_code: body.code,
+    p_vote: body.vote,
+    p_voter_hash: voterHash
+  }
+);
+
+if (error) throw error;
+
+if (result === 'already_voted') {
+  return send(res, 409, {
+    error: 'You have already voted for this code.'
+  });
+}
+
+if (result === 'not_found') {
+  return send(res, 404, {
+    error: 'Gift code not found.'
+  });
+}
+
+return send(res, 200, { ok: true });
       }
 
       if (!validCode(body.code) ||
